@@ -8,14 +8,18 @@ import com.pblgllgs.loans.model.Customer;
 import com.pblgllgs.loans.model.Loans;
 import com.pblgllgs.loans.model.Properties;
 import com.pblgllgs.loans.repository.LoansRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class LoansController {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoansController.class);
     @Autowired
     private LoansRepository loansRepository;
 
@@ -26,8 +30,10 @@ public class LoansController {
     public List<Loans> getLoansDetails(
             @RequestHeader("pblgllgs-correlation-id") String correlationid,
             @RequestBody Customer customer){
+        logger.info("getLoansDetails() method started");
         List<Loans> loans
                 = loansRepository.findByCustomerIdOrderByStartDtDesc(customer.getCustomerId());
+        logger.info("getLoansDetails() method ended");
         if(loans != null){
             return loans;
         }else {
